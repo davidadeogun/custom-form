@@ -2,24 +2,33 @@
 #A custom form
 #Where users can add data to a csv file
 
-
+#Tutorial url : https://www.youtube.com/watch?v=7MQWCtTr0zA&t=2592s
 from csv import DictWriter
 import tkinter as tk
 from tkinter import ttk
 import os
 import csv
+from collections import namedtuple
 
 win = tk.Tk()
 win.title("Custom Form")
 
-def main():
+def main(): #Prints the data in the csv file to the terminal
    
-   with open('file.csv') as csv_file:
-    reader = csv.reader(csv_file)
-    next(reader)
-    """CONTINUE FROM HERE"""
-
-       
+   
+   #An exception handling. 
+   #FileNotFoundError 
+   #Handled the exception incase the csv file (file.csv) is not found.
+   #This reads the csv file and converts it into a list, printing on a new line to the terminal
+    try:
+        with open("file.csv", "rt") as data_file:
+            f_csv = csv.reader(data_file)
+            headers = next(f_csv)
+            for row in f_csv:
+                print(row)
+            
+    except FileNotFoundError as not_found_err:
+        print(not_found_err)
 
 
 
@@ -94,11 +103,22 @@ def action():
     checkbox = checkbox_var.get()
     radio_user = usertype.get()
     user_gender = gender_var.get()
+
+    def calculate(event):
+        try:
+            
+            age = age_var.get()
+
+            max_rate = 220- age
+
+            slow = max_rate * 0.65
+            fast = max_rate * 0.89
+            
+
+        except ValueError:
+
+            
     
-    #For this tutorial, I will print the result, but 
-    #later on, I would rather return the values and call the functions
-    #in the main function.
-    #print(f"{username} is {userage} years old, and the email is {useremail}")
     
 
     """The checkbox gives a default value of 0 if it is unchecked,
@@ -108,10 +128,10 @@ def action():
     else:
         subscribed = 'Yes'
 
-    print(f"{user_gender}, {radio_user}, {subscribed}")
+    f"{user_gender}, {radio_user}, {subscribed}" #Does nothing print result to terminal
 
     
-    #Create a text file that saves the entry data
+    #Create a csv file that saves the entry data
     #newline stores the entry data on the next line in the csv file
     with open ('file.csv', 'a', newline='') as f:
         dict_writer = DictWriter(f, fieldnames=['UserName', 'User Email Address', 'User Phone Number', 'User Age', 
@@ -140,7 +160,7 @@ def action():
            
 submit_button = ttk.Button(win, text='Submit', command=action)
 submit_button.grid(row=7, column=1)
-
+     
 
 if __name__ == "__main__":
     main()
